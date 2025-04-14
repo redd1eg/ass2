@@ -4,10 +4,11 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class MyArrayList<E> implements MyList<E> {
-    private static final int DEFAULT_CAPACITY = 10;
-    private Object[] elements;
-    private int size;
+    private static final int DEFAULT_CAPACITY = 10; // Начальная ёмкость массива
+    private Object[] elements; // Массив для хранения элементов
+    private int size; // Кол-во элементов в списке
 
+    // Конструктор: создаёт массив с начальной ёмкостью
     public MyArrayList() {
         elements = new Object[DEFAULT_CAPACITY];
         size = 0;
@@ -15,8 +16,8 @@ public class MyArrayList<E> implements MyList<E> {
 
     @Override
     public void add(E element) {
-        ensureCapacity();
-        elements[size++] = element;
+        ensureCapacity(); // Увеличиваем массив при необходимости
+        elements[size++] = element; // Добавляем элемент и увеличиваем размер
     }
 
     @Override
@@ -24,8 +25,8 @@ public class MyArrayList<E> implements MyList<E> {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
         }
-        ensureCapacity();
-        System.arraycopy(elements, index, elements, index + 1, size - index);
+        ensureCapacity(); // Проверка на необходимость расширения массива
+        System.arraycopy(elements, index, elements, index + 1, size - index); // Сдвигаем элементы вправо
         elements[index] = element;
         size++;
     }
@@ -56,9 +57,9 @@ public class MyArrayList<E> implements MyList<E> {
         E removedElement = (E) elements[index];
         int numMoved = size - index - 1;
         if (numMoved > 0) {
-            System.arraycopy(elements, index + 1, elements, index, numMoved);
+            System.arraycopy(elements, index + 1, elements, index, numMoved); // Сдвигаем элементы влево
         }
-        elements[--size] = null;
+        elements[--size] = null; // Удаляем ссылку на последний элемент (GC)
         return removedElement;
     }
 
@@ -74,13 +75,13 @@ public class MyArrayList<E> implements MyList<E> {
 
     @Override
     public void clear() {
-        elements = new Object[DEFAULT_CAPACITY];
+        elements = new Object[DEFAULT_CAPACITY]; // Новый массив
         size = 0;
     }
 
     @Override
     public void sort(Comparator<E> cmp) {
-        Arrays.sort((E[]) elements, 0, size, cmp);
+        Arrays.sort((E[]) elements, 0, size, cmp); // Сортируем только значимую часть массива
     }
 
     @Override
@@ -103,6 +104,7 @@ public class MyArrayList<E> implements MyList<E> {
         };
     }
 
+    // Увеличиваем ёмкость массива в 2 раза, если он заполнен
     private void ensureCapacity() {
         if (size == elements.length) {
             int newCapacity = elements.length * 2;
